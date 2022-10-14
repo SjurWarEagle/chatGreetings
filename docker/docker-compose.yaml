@@ -1,0 +1,12 @@
+version: '3.3'
+
+services:
+  nadin-timer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+#    volumes:
+#      - ../nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 96:96
+    restart: unless-stopped
