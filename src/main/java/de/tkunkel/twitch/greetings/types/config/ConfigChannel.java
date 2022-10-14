@@ -1,17 +1,10 @@
-package de.tkunkel.twitch.monitor.types.config;
+package de.tkunkel.twitch.greetings.types.config;
 
 import java.util.List;
 
 public class ConfigChannel {
 
     public String name;
-    public List<ConfigEmote> emotes;
+    public List<ConfigGreeting> greetings;
 
-    @Override
-    public String toString() {
-        return "ConfigChannel{" +
-                "name='" + name + '\'' +
-                ", emotes=" + emotes +
-                '}';
-    }
 }

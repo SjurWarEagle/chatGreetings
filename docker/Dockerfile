@@ -1,29 +1,13 @@
-FROM node:16.12.0-stretch as buildstep
+FROM maven:3.8.6-openjdk-18 as buildstep
 RUN mkdir -p /project/
-RUN mkdir -p /project/dist/nadin-timer
 
-RUN apt update -y && \
-    apt install -y --no-install-recommends --no-install-suggests \
-    nginx \
-    ca-certificates &&\
-    rm -rf /var/cache/apt/ &&\
-    rm -rf /var/lib/apt/lists/*
-
-WORKDIR /project
-ADD . /project
-RUN npm install --no-audi && \
-    npm run lint:prod && \
-    npm run build:prod && \
-    rm -r node_modules
-
+WORKDIR /project/
+RUN git clone https://github.com/SjurWarEagle/chatGreetings .
+RUN mvn clean compile assembly:single
 
 FROM nginx:mainline-alpine
 WORKDIR /project
-COPY --from=buildstep /project/dist /project
-ADD docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
-RUN rm -rf /etc/apt/apt.conf.d/90nginx
-EXPOSE 96
+COPY --from=buildstep /project/chatGreetings-1.0-SNAPSHOT-jar-with-dependencies.jar /project
 
-STOPSIGNAL SIGTERM
-
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /project/chatGreetings/target
+CMD ["java", "-jar", "/project/chatGreetings-1.0-SNAPSHOT-jar-with-dependencies.jar"]

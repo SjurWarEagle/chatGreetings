@@ -1,18 +1,8 @@
-package de.tkunkel.twitch.monitor.types.config;
+package de.tkunkel.twitch.greetings.types.config;
 
-public class ConfigEmote {
-    public String name;
-    public int triggerCnt;
-    public int intervalInSeconds;
-    public int coolDownInSeconds;
+import java.util.List;
 
-    @Override
-    public String toString() {
-        return "ConfigEmote{" +
-                "name='" + name + '\'' +
-                ", triggerCnt=" + triggerCnt +
-                ", intervalInSeconds=" + intervalInSeconds +
-                ", coolDownInSeconds=" + coolDownInSeconds +
-                '}';
-    }
+public class ConfigGreeting {
+    public String user;
+    public List<String> greetingOptions;
 }

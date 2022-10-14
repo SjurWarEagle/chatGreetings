@@ -40,6 +40,8 @@ public class Starter {
         Logger logger = LoggerFactory.getLogger(Starter.class.getName());
 
         Config config = readConfig();
+//        logger.info(config.toString());
+
         // chat credential
         String accessToken = config.accessToken;
         OAuth2Credential credential = new OAuth2Credential("twitch", accessToken);
@@ -56,12 +58,15 @@ public class Starter {
         connectToChannels(logger, config, twitchClient);
 
         messageProcessor.setConfig(config);
+        messageProcessor.setClient(twitchClient);
 
         //noinspection CodeBlock2Expr
         eventManager.onEvent(ChannelMessageEvent.class, event -> {
             messageProcessor.process(event.getChannel().getName()
+                    , event.getUser().getName()
                     , event.getMessage()
             );
+//            twitchClient.getChat().sendPrivateMessage("sjurwareagle", "Test2");
         });
 
     }

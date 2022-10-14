@@ -1,13 +1,12 @@
-import de.tkunkel.twitch.monitor.types.config.Config;
+package de.tkunkel.twitch.greetings;
+
+import com.github.twitch4j.TwitchClient;
+import de.tkunkel.twitch.greetings.types.config.Config;
 
 public interface IMessageProcessor {
     void setConfig(Config config);
 
-    void process(String channelName, String message);
+    void process(String channelName, String user, String message);
 
-    boolean getTriggerAndSetToRead(String chat, String emote);
-
-    boolean isInCoolDown(String chat, String emote);
-
-    int getEventsOfInterval(String chat, String emote);
+    void setClient(TwitchClient twitchClient);
 }
