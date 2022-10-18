@@ -60,7 +60,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>fully.qualified.MainClass</mainClass>
+                            <mainClass>de.tkunkel.twitch.greetings.Starter</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

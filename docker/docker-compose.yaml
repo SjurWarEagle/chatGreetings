@@ -1,12 +1,12 @@
 version: '3.3'
 
 services:
-  nadin-timer:
+  twitch-greetings:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-#    volumes:
-#      - ../nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    volumes:
+      - ../../src/main/resources/private_config.json:/project/private_config.json:ro
 #    ports:
 #      - 96:96
     restart: unless-stopped
