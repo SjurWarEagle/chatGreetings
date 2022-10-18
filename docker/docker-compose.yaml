@@ -5,6 +5,8 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
+    environment:
+      - CONFIG-FILE:/project/private_config.json
     volumes:
       - ../../src/main/resources/private_config.json:/project/private_config.json:ro
 #    ports:

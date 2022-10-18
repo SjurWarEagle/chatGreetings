@@ -18,8 +18,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.annotation.PostConstruct;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 @SpringBootApplication
@@ -36,7 +37,7 @@ public class Starter {
     }
 
     @PostConstruct
-    private void startMonitor() {
+    private void startMonitor() throws IOException {
         Logger logger = LoggerFactory.getLogger(Starter.class.getName());
 
         Config config = readConfig();
@@ -60,7 +61,6 @@ public class Starter {
         messageProcessor.setConfig(config);
         messageProcessor.setClient(twitchClient);
 
-        //noinspection CodeBlock2Expr
         eventManager.onEvent(ChannelMessageEvent.class, event -> {
             messageProcessor.process(event.getChannel().getName()
                     , event.getUser().getName()
@@ -78,12 +78,14 @@ public class Starter {
         }
     }
 
-    private static Config readConfig() {
+    private static Config readConfig() throws IOException {
         Gson gson = new Gson();
-        InputStream configSource = Starter.class.getClassLoader().getResourceAsStream("private_config.json");
-        if (Objects.isNull(configSource)) {
-            throw new RuntimeException("private_config.json not found!");
+
+        String configFile = System.getenv("CONFIG_FILE");
+        if (Objects.isNull(configFile)) {
+            throw new RuntimeException("Environment variable CONFIG_FILE not set");
         }
-        return gson.fromJson(new InputStreamReader(configSource), Config.class);
+
+        return gson.fromJson(Files.readString(Paths.get(configFile)), Config.class);
     }
 }
