@@ -1,14 +1,21 @@
 version: '3.3'
 
 services:
-  twitch-greetings:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+#  twitch-greetings:
+#    build:
+#      context: ..
+#      dockerfile: docker/Dockerfile
+#    environment:
+#      - CONFIG-FILE:/project/config.json
+#    volumes:
+#      - ../src/main/resources/private_config.json:/project/config.json:ro
+##    ports:
+##      - 96:96
+#    restart: unless-stopped
+  twitch-greetings2:
+    image: wareagledocker/chat-greetings:latest
     environment:
-      - CONFIG-FILE:/project/private_config.json
+      - CONFIG-FILE:/project/config.json
     volumes:
-      - ../../src/main/resources/private_config.json:/project/private_config.json:ro
-#    ports:
-#      - 96:96
+      - ../src/main/resources/private_config.json:/project/config.json:ro
     restart: unless-stopped
