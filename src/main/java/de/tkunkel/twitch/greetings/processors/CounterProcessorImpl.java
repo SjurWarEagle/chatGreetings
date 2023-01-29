@@ -26,7 +26,7 @@ public class CounterProcessorImpl implements IProcessor {
 
     @Override
     public void process(String channelName, String user, String message) {
-        if (channelName.equals("SjurWarEagle") && (message.startsWith("") || message.startsWith(""))){
+        if (channelName.equals("SjurWarEagle") && (message.startsWith(SKULL) || message.startsWith(SKULL_WITH_BONES))){
     }
     }
 
