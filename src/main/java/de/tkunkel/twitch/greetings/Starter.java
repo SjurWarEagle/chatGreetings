@@ -30,7 +30,7 @@ import java.util.Objects;
 public class Starter {
 
     @Autowired
-    private MessageProcessor messageProcessor;
+    private MessageProcessorImpl messageProcessor;
 
     public static void main(String[] args) {
         SpringApplication.run(Starter.class, args);

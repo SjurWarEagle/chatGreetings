@@ -1,4 +1,4 @@
-package de.tkunkel.twitch.greetings;
+package de.tkunkel.twitch.greetings.processors;
 
 import com.github.twitch4j.TwitchClient;
 import de.tkunkel.twitch.greetings.types.Chat2wasGreeted;
@@ -10,20 +10,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 @Component
-public class MessageProcessor implements IMessageProcessor {
-    private final Logger logger = LoggerFactory.getLogger(MessageProcessor.class.getName());
+public class GreetingProcessorImpl implements IProcessor {
+    private final Logger logger = LoggerFactory.getLogger(GreetingProcessorImpl.class.getName());
+
     private final Chat2wasGreeted chat2wasGreeted = new Chat2wasGreeted();
     private Config config;
     private TwitchClient twitchClient;
 
-    @Override
     public void setConfig(Config config) {
         this.config = config;
-//        for (ConfigChannel channel : config.channels) {
-//        }
     }
 
     @Override
@@ -45,6 +46,11 @@ public class MessageProcessor implements IMessageProcessor {
                 }
             }
         }
+    }
+
+    @Override
+    public String getUsageInfo() {
+        return this.getClass().getName();
     }
 
     private void storeLinkIfExists(ConfigChannel channel, String user, String message) {
@@ -74,4 +80,5 @@ public class MessageProcessor implements IMessageProcessor {
     public void setClient(TwitchClient twitchClient) {
         this.twitchClient = twitchClient;
     }
+
 }
