@@ -1,4 +1,5 @@
-src/main/resources/private_config.json
+src/main/resources/private_config*.json
 .idea
 target
 *.iml
+links-test.txt

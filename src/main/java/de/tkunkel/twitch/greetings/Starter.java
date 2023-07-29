@@ -12,10 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -24,13 +22,12 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 @SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackageClasses = Starter.class)
+//@ComponentScan(basePackageClasses = Starter.class)
 @EntityScan(basePackageClasses = Starter.class)
 public class Starter {
 
     @Autowired
-    private MessageProcessorImpl messageProcessor;
+    private IMessageProcessor messageProcessor;
 
     public static void main(String[] args) {
         SpringApplication.run(Starter.class, args);
@@ -57,9 +54,6 @@ public class Starter {
         EventManager eventManager = twitchClient.getEventManager();
 
         connectToChannels(logger, config, twitchClient);
-
-        messageProcessor.setConfig(config);
-        messageProcessor.setClient(twitchClient);
 
         eventManager.onEvent(ChannelMessageEvent.class, event -> {
             messageProcessor.process(event.getChannel().getName()

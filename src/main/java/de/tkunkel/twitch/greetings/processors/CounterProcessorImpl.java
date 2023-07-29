@@ -1,33 +1,42 @@
 package de.tkunkel.twitch.greetings.processors;
 
-import com.github.twitch4j.TwitchClient;
-import de.tkunkel.twitch.greetings.types.config.Config;
+import de.tkunkel.twitch.greetings.data.ClientHolder;
+import de.tkunkel.twitch.greetings.data.ConfigHolder;
+import de.tkunkel.twitch.greetings.data.RuntimeInfoHolder;
+import org.springframework.stereotype.Component;
 
-public class CounterProcessorImpl implements IProcessor {
-    private Config config;
-    private TwitchClient twitchClient;
+@Component
+public class CounterProcessorImpl extends AbstractProcessor {
+    @SuppressWarnings("FieldCanBeLocal")
     private final String SKULL = "\uD83D\uDC80";
+    @SuppressWarnings("FieldCanBeLocal")
     private final String SKULL_WITH_BONES = "☠";
 
+    public CounterProcessorImpl(ConfigHolder configHolder, ClientHolder clientHolder, RuntimeInfoHolder runtimeInfoHolder) {
+        super(configHolder, clientHolder, runtimeInfoHolder);
+    }
 
     @Override
     public String getUsageInfo() {
         return this.getClass().getName();
     }
 
-    public void setConfig(Config config) {
-        this.config = config;
-    }
-
-    @Override
-    public void setClient(TwitchClient twitchClient) {
-        this.twitchClient = twitchClient;
-    }
-
     @Override
     public void process(String channelName, String user, String message) {
-        if (channelName.equals("SjurWarEagle") && (message.startsWith(SKULL) || message.startsWith(SKULL_WITH_BONES))){
+        if (channelName.equalsIgnoreCase("SjurWarEagle")
+                && (message.startsWith(SKULL) || message.startsWith(SKULL_WITH_BONES))) {
+        }
     }
+
+    protected int extractCnt(String message) {
+        String cntAsString = message.substring(2);
+        int cnt;
+        try {
+            cnt = Integer.parseInt(cntAsString);
+        } catch (Exception e) {
+            cnt = 0;
+        }
+        return cnt;
     }
 
 }
