@@ -1,5 +1,6 @@
 package de.tkunkel.twitch.greetings.processors;
 
+import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import de.tkunkel.twitch.greetings.data.ClientHolder;
 import de.tkunkel.twitch.greetings.data.ConfigHolder;
 import de.tkunkel.twitch.greetings.data.RuntimeInfoHolder;
@@ -18,7 +19,7 @@ public class TextsProcessorImpl extends AbstractProcessor {
     }
 
     @Override
-    public void process(String channelName, String user, String message) {
+    public void process(String channelName, String user, String message, ChannelMessageEvent event) {
         for (ConfigChannel channel : configHolder.getConfig().channels) {
             if (channel.name.equalsIgnoreCase(channelName)) {
                 for (ConfigTexts text : channel.texts) {
@@ -29,7 +30,7 @@ public class TextsProcessorImpl extends AbstractProcessor {
                             for (String line : text.lines) {
                                 try {
                                     clientHolder.getTwitchClient().getChat().sendMessage(channelName, line);
-                                    Thread.sleep(1000);
+                                    Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     throw new RuntimeException(e);
                                 }

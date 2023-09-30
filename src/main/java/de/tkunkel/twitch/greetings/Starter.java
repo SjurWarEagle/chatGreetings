@@ -4,7 +4,12 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.core.EventManager;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
-import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
+import com.github.twitch4j.chat.events.AbstractChannelEvent;
+import com.github.twitch4j.chat.events.channel.*;
+import com.github.twitch4j.chat.events.roomstate.Robot9000Event;
+import com.github.twitch4j.chat.events.roomstate.SlowModeEvent;
+import com.github.twitch4j.common.events.domain.EventChannel;
+import com.github.twitch4j.common.events.domain.EventUser;
 import com.google.gson.Gson;
 import de.tkunkel.twitch.greetings.types.config.Config;
 import de.tkunkel.twitch.greetings.types.config.ConfigChannel;
@@ -38,7 +43,6 @@ public class Starter {
         Logger logger = LoggerFactory.getLogger(Starter.class.getName());
 
         Config config = readConfig();
-//        logger.info(config.toString());
 
         // chat credential
         String accessToken = config.accessToken;
@@ -55,14 +59,54 @@ public class Starter {
 
         connectToChannels(logger, config, twitchClient);
 
+        eventManager.onEvent(Object.class, event -> {
+            if (event instanceof ChannelJoinEvent
+                    || event instanceof ChannelMessageEvent
+                    || event instanceof IRCMessageEvent
+                    || event instanceof ChannelLeaveEvent
+                    || event instanceof SubscriptionEvent
+                    || event instanceof SlowModeEvent
+                    || event instanceof Robot9000Event
+                    || event.toString().contains("dracon1")
+                    || event.toString().contains("!stuff")
+            ) {
+                return;
+            }
+            System.out.println(event);
+        });
+
+        eventManager.onEvent(SubscriptionEvent.class, event -> {
+            //TODO
+        });
+
+        eventManager.onEvent(ChannelLeaveEvent.class, event -> {
+            logJoinEnterEvent(false, event.getChannel(), event.getUser());
+        });
+
+        eventManager.onEvent(ChannelJoinEvent.class, event -> {
+            logJoinEnterEvent(true, event.getChannel(), event.getUser());
+        });
+
         eventManager.onEvent(ChannelMessageEvent.class, event -> {
             messageProcessor.process(event.getChannel().getName()
                     , event.getUser().getName()
                     , event.getMessage()
+                    , event
             );
-//            twitchClient.getChat().sendPrivateMessage("sjurwareagle", "Test2");
         });
 
+    }
+
+    private void logJoinEnterEvent(boolean hasJoined, EventChannel channel, EventUser user) {
+        return;
+        //TODO
+
+//        String message = String.format("%s: %s",channel.getName(),user.getName());
+//        if (hasJoined){
+//            System.out.println("entered: "+message);
+//        }else {
+//            System.out.println("left   : "+message);
+//        }
     }
 
     private static void connectToChannels(Logger logger, Config config, TwitchClient twitchClient) {

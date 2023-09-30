@@ -1,5 +1,6 @@
 package de.tkunkel.twitch.greetings.processors;
 
+import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import de.tkunkel.twitch.greetings.data.ClientHolder;
 import de.tkunkel.twitch.greetings.data.ConfigHolder;
 import de.tkunkel.twitch.greetings.data.RuntimeInfoHolder;
@@ -15,6 +16,6 @@ abstract public class AbstractProcessor implements IProcessor {
         this.runtimeInfoHolder = runtimeInfoHolder;
     }
 
-    public abstract void process(String channelName, String user, String message);
+    public abstract void process(String channelName, String user, String message, ChannelMessageEvent event);
 
 }

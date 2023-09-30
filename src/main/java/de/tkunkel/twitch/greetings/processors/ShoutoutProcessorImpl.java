@@ -1,5 +1,6 @@
 package de.tkunkel.twitch.greetings.processors;
 
+import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import de.tkunkel.twitch.greetings.data.ClientHolder;
 import de.tkunkel.twitch.greetings.data.ConfigHolder;
 import de.tkunkel.twitch.greetings.data.RuntimeInfoHolder;
@@ -29,14 +30,14 @@ public class ShoutoutProcessorImpl extends AbstractProcessor {
     }
 
     @Override
-    public void process(String channelName, String user, String message) {
+    public void process(String channelName, String user, String message, ChannelMessageEvent event) {
         HashMap<String, HashMap<String, Date>> lastShoutouts = runtimeInfoHolder.getRuntimeInfo().getLastShoutout();
         if (Objects.isNull(lastShoutouts)) {
             lastShoutouts = new HashMap<>();
             runtimeInfoHolder.getRuntimeInfo().setLastShoutout(lastShoutouts);
         }
         if (!isUserRelevantForShoutout(channelName, user)) {
-            LOG.info(channelName + ": NO shoutout to " + user + ", user not relevant.");
+//            LOG.info(channelName + ": NO shoutout to " + user + ", user not relevant.");
             return;
         }
 

@@ -1,5 +1,6 @@
 package de.tkunkel.twitch.greetings.processors;
 
+import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import de.tkunkel.twitch.greetings.data.ClientHolder;
 import de.tkunkel.twitch.greetings.data.ConfigHolder;
 import de.tkunkel.twitch.greetings.data.RuntimeInfoHolder;
@@ -22,7 +23,7 @@ public class CounterProcessorImpl extends AbstractProcessor {
     }
 
     @Override
-    public void process(String channelName, String user, String message) {
+    public void process(String channelName, String user, String message, ChannelMessageEvent event) {
         if (channelName.equalsIgnoreCase("SjurWarEagle")
                 && (message.startsWith(SKULL) || message.startsWith(SKULL_WITH_BONES))) {
         }
