@@ -11,9 +11,10 @@ RUN mvn -Dmaven.test.skip=true clean package spring-boot:repackage
 RUN ls /project
 
 FROM maven:3.8.6-openjdk-18
-RUN mkdir -p /project/config
 #WORKDIR /project
-COPY --from=buildstep /project/twitchGreetings-*.jar /project
+RUN mkdir -p /project/config
+COPY --from=buildstep /project/target/*.jar /project
+RUN ls -al /project/twitchGreetings-*.jar
 
 WORKDIR /project/
 CMD ["java", "-jar", "twitchGreetings-1.0-SNAPSHOT.jar"]
