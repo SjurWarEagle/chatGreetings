@@ -3,3 +3,5 @@ src/main/resources/private_config*.json
 target
 *.iml
 links-test.txt
+data/*.txt
+runtime-info.json
