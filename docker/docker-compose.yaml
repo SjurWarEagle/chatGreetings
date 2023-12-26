@@ -1,8 +1,8 @@
 version: '3.3'
 
 services:
-  chat-greetings:
-    image: wareagledocker/chat-greetings:latest
+  twitch-greetings:
+    image: wareagledocker/twitch-greetings:latest
     environment:
       - CONFIG_FILE:/project/config.json
     volumes:
