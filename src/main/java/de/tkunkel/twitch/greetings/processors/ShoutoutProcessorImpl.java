@@ -60,8 +60,8 @@ public class ShoutoutProcessorImpl extends AbstractProcessor {
             userShoutout = new Date();
             lastShoutouts.get(channelName).put(user, userShoutout);
             LOG.info("-> " + channelName + " shoutout to " + user);
-            clientHolder.getTwitchClient().getChat().sendMessage(channelName, "!so " + user);
 //            clientHolder.getTwitchClient().getChat().sendMessage(channelName, "/shoutout " + user);
+            clientHolder.getTwitchClient().getChat().sendMessage(channelName, "!so " + user);
             try {
                 runtimeInfoHolder.storeRuntimeInfo();
             } catch (IOException e) {

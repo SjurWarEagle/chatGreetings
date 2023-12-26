@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 class CounterProcessorImplTest {
-
     @Test
     public void extractCnt() throws IOException {
+
         ConfigHolder configHolder = new ConfigHolder();
         CounterProcessorImpl counterProcessor = new CounterProcessorImpl(configHolder, new ClientHolder(configHolder), new RuntimeInfoHolder());
         String message = "💀+5";

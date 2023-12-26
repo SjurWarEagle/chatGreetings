@@ -4,7 +4,6 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.core.EventManager;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
-import com.github.twitch4j.chat.events.AbstractChannelEvent;
 import com.github.twitch4j.chat.events.channel.*;
 import com.github.twitch4j.chat.events.roomstate.Robot9000Event;
 import com.github.twitch4j.chat.events.roomstate.SlowModeEvent;
@@ -15,30 +14,41 @@ import de.tkunkel.twitch.greetings.types.config.Config;
 import de.tkunkel.twitch.greetings.types.config.ConfigChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Objects;
 
 @SpringBootApplication
 //@ComponentScan(basePackageClasses = Starter.class)
 @EntityScan(basePackageClasses = Starter.class)
-public class Starter {
+@EnableScheduling
+public class Starter implements InitializingBean {
 
     @Autowired
     private IMessageProcessor messageProcessor;
+
+    private TwitchClient twitchClient;
+    private final Logger LOG = LoggerFactory.getLogger(Starter.class.getName());
 
     public static void main(String[] args) {
         SpringApplication.run(Starter.class, args);
     }
 
-    @PostConstruct
+    @Override
+    public void afterPropertiesSet() throws IOException {
+        startMonitor();
+    }
+
     private void startMonitor() throws IOException {
         Logger logger = LoggerFactory.getLogger(Starter.class.getName());
 
@@ -48,7 +58,7 @@ public class Starter {
         String accessToken = config.accessToken;
         OAuth2Credential credential = new OAuth2Credential("twitch", accessToken);
 
-        TwitchClient twitchClient = TwitchClientBuilder.builder()
+        twitchClient = TwitchClientBuilder.builder()
                 .withEnableHelix(true)
                 .withEnableChat(true)
                 .withEnableChat(true)
@@ -72,7 +82,8 @@ public class Starter {
             ) {
                 return;
             }
-            System.out.println(event);
+            return;
+//            System.out.println(event);
         });
 
         eventManager.onEvent(SubscriptionEvent.class, event -> {
@@ -107,6 +118,14 @@ public class Starter {
 //        }else {
 //            System.out.println("left   : "+message);
 //        }
+    }
+
+    @Scheduled(fixedDelay = 30*60*1000L)
+    private void regularWiggling(){
+        LOG.info("Pushing emote count.");
+        twitchClient.getChat().sendMessage("dieluette","dielueWiggle dielueCoffee dielueWiggle",null);
+        twitchClient.getChat().sendMessage("sjurwareagle","dielueWiggle dielueCoffee dielueWiggle",null);
+        twitchClient.getChat().sendMessage("sjurwareagle","dielueWiggle dielueCoffee dielueWiggle",null);
     }
 
     private static void connectToChannels(Logger logger, Config config, TwitchClient twitchClient) {

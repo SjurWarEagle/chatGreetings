@@ -22,8 +22,6 @@ import java.util.Objects;
 public class CommandProcessorImpl extends AbstractProcessor {
     private final Logger logger = LoggerFactory.getLogger(CommandProcessorImpl.class.getName());
 
-    private final Chat2wasGreeted chat2wasGreeted = new Chat2wasGreeted();
-
     public CommandProcessorImpl(ConfigHolder configHolder, ClientHolder clientHolder, RuntimeInfoHolder runtimeInfoHolder) {
         super(configHolder, clientHolder, runtimeInfoHolder);
     }
@@ -37,7 +35,7 @@ public class CommandProcessorImpl extends AbstractProcessor {
                     if (Objects.isNull(command)||Objects.isNull(command.command)){
                         continue;
                     }
-                    if (!message.toLowerCase().replaceAll(" ","").startsWith(command.command.toLowerCase().replaceAll(" ",""))) {
+                    if (!message.toLowerCase().replaceAll(" ","").trim().startsWith(command.command.toLowerCase().trim().replaceAll(" ",""))) {
                         continue;
                     }
                     if (command.meOnly && (!user.equalsIgnoreCase("sjurwareagle"))) {
