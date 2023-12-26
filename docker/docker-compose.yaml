@@ -4,8 +4,10 @@ services:
   twitch-greetings:
     image: wareagledocker/twitch-greetings:latest
     environment:
-      - CONFIG_FILE:/project/config.json
+      - CONFIG_FILE=/project/config/config.json
+      - RUNTIME_INFO_FILE=/project/config/runtime_info.json
     volumes:
-      - ../src/main/resources/private_config.json:/project/config.json:ro
+      - ../src/main/resources/private_config.json:/project/config/config.json:ro
+      - ../data/runtime_info.json:/project/config/runtime_info.json:rw
     restart: no
 #    restart: unless-stopped

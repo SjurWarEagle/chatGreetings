@@ -26,7 +26,12 @@ public class RuntimeInfoHolder {
 
     private RuntimeInfoBo readRuntimeInfo() throws IOException {
         String json = Files.readString(Paths.get(configFile));
-        return gson.fromJson(json, RuntimeInfoBo.class);
+        RuntimeInfoBo runtimeInfoBo = gson.fromJson(json, RuntimeInfoBo.class);
+        if (Objects.isNull(runtimeInfoBo)) {
+            return new RuntimeInfoBo();
+        } else {
+            return runtimeInfoBo;
+        }
     }
 
     public RuntimeInfoBo getRuntimeInfo() {
